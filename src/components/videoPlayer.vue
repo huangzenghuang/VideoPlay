@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, reactive, Ref, onMounted, computed } from 'vue'
   import VideoObject from '../util/class/VideoObject'
-
+  const randomId = (Math.random()*10000000000+"").slice(0,10)
   let props = defineProps<{
     source: Array<VideoObject> ,
     width: string,
@@ -12,18 +12,18 @@
   let canPlay = ref(false)
   let currentTime: Ref<number> = ref(0)
   let duration: Ref<number> = ref(0)
-  let el:any
-  let controlEl:any
+  let el: HTMLVideoElement | any
+  let controlEl: HTMLElement | any
   let progressBarWidth:Ref<string> = ref('')
   let playRate:Ref<number> = ref(1)
   let multiple:Array<number> = [1.0,1.25,1.5,1.75,2.0]
   let pip:Ref<boolean> = ref(false)
   let fullStatus:Ref<boolean> = ref(false)
   let fullScreen:Ref<boolean> = ref(false)
-    
+
   onMounted(()=>{
-    el = document.getElementsByTagName('video')[0]
-    controlEl = document.getElementsByClassName('control')[0]
+    el = document.getElementById('video-'+randomId)
+    controlEl = document.getElementById('control-'+randomId)
     // 视频加载完毕
     el.addEventListener("canplay",()=>{
       duration.value = el.duration
@@ -59,6 +59,16 @@
   function updateMultiple(multiple:number){
     playRate.value = multiple
     el.playbackRate = multiple
+  }
+  // 调整进度条
+  function adjustProgress(e:any){
+    if(canPlay.value){
+      // 移动进度条到指定位置
+      progressBarWidth.value = e.layerX+'px'
+      let progressBar = document.querySelector('.progress_bar') as HTMLElement
+      let frames = (e.layerX / progressBar.offsetWidth) * duration.value
+      el.currentTime = frames
+    }
   }
   // 打开画中画
   function openPip(){
@@ -101,7 +111,6 @@
       exitFullscreen()
     }
   }
-  
   //進入全屏
   function launchFullscreen() {
     //此方法不可以在異步任務中執行，否則火狐無法全屏
@@ -109,8 +118,8 @@
       el.requestFullscreen();
     } else if(el.mozRequestFullScreen) {
       el.mozRequestFullScreen();
-    } else if(el.msRequestFullscreen){ 
-      el.msRequestFullscreen();  
+    } else if(el.msRequestFullscreen){
+      el.msRequestFullscreen();
     } else if(el.oRequestFullscreen){
       el.oRequestFullscreen();
     }else if(el.webkitRequestFullscreen){
@@ -144,14 +153,14 @@
 </script>
 
 <template>
-  <div class="box">
-    <video>
+  <div :id="randomId" class="videoBox">
+    <video :id="'video-'+randomId">
       <template v-for="item in source" :key="item.url">
         <source v-if="item.resolution == current.resolution" :src="item.src"/>
       </template>
     </video>
-    <div class="control">
-      <div class="progress_bar">
+    <div :id="'control-'+randomId" class="control">
+      <div @click="adjustProgress" class="progress_bar">
         <div :style="'width:'+progressBarWidth"></div>
         <img :style="'left:'+progressBarWidth" class="logo" :src="progressBarLogo" alt="">
       </div>
@@ -167,7 +176,7 @@
           <div class="tag resolution">
             {{current.resolution}}
             <div class="tag_content">
-              <p style="width: 50px" v-for="item in source">
+              <p style="width: 50px" v-for="item in source" :key="item.resolution">
                 {{item.resolution}}
               </p>
             </div>
@@ -175,7 +184,7 @@
           <div class="tag multiple">
             倍数
             <div class="tag_content">
-              <p v-for="item in multiple" @click="updateMultiple(item)" :class="item == playRate" style="width: 50px">
+              <p v-for="item in multiple" :key="item" @click="updateMultiple(item)" :class="item == playRate" style="width: 50px">
                 {{item}}x
               </p>
             </div>
@@ -198,87 +207,5 @@
 </template>
 
 <style lang="scss" scoped>
-  .box{
-    overflow: hidden;
-    position: relative;
-    background: #000;
-  }
-  .control{
-    position: absolute;
-    top: 0;
-    .progress_bar{
-      width: 100%;
-      height: 5px;
-      background: rgba($color: #ccc, $alpha: .5);
-      display: none;
-      position: absolute;
-      bottom: 30px;
-      border-radius: 2px;
-      >div{
-        width: 0;
-        height: 5px;
-        background: #1890ff;
-      }
-      .logo{
-        width: 40px;
-        height: 40px;
-        position: absolute;
-        top: -40px;
-        left: 0;
-        transform: scale(1.5)translateX(-13px);
-      }
-    }
-    .toolbar{
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-
-      position: absolute;
-      bottom: 0;
-      .left{
-        display: flex;
-        align-items: center;
-        svg{
-          width: 32px;
-          height: 22px;
-        }
-      }
-      .right{
-        display: flex;
-        .tag{
-          position: relative;
-          width: 36px;
-          height: 22px;
-          line-height: 22px;
-          text-align: center;
-          font-size: 14px;
-          color: hsla(0,0%,100%,.8);
-          fill: #fff;
-          z-index: 2;
-          .tag_content{
-            display: none;
-            position: absolute;
-            bottom: 30px;
-            background: #000;
-            padding: 10px;
-          }
-        }
-        .resolution{
-          .tag_content{
-            right: -16px;
-          }
-        }
-        .tag:hover{
-          .tag_content{
-            display: block;
-          }
-        }
-      }
-    }
-  }
-  .control:hover{
-    .progress_bar{
-      display: block;
-    }
-  }
+  @import "../css/index.scss"
 </style>

@@ -17,7 +17,7 @@ const source = [
 
 <template>
   <!-- <test></test> -->
-  <VideoPlayer :source="source" width="1200px" height="900px" progressBarLogo="run.gif"></VideoPlayer>
+  <VideoPlayer :source="source" width="400px" height="300px" progressBarLogo="run.gif"></VideoPlayer>
 </template>
 
 <style scoped>

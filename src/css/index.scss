@@ -1,0 +1,13 @@
+@import "video.scss";
+@import "control.scss";
+
+.videoBox{
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+.videoBox:hover{
+  .control{
+    display: block;
+  }
+}

@@ -1,0 +1,129 @@
+video::-webkit-media-controls-fullscreen-button {
+  display: none;
+}
+
+video::-webkit-media-controls-play-button {
+  display: none;
+}
+
+video::-webkit-media-controls-timeline {
+  display: none;
+}
+
+video::-webkit-media-controls-current-time-display {
+  display: none;
+}
+
+video::-webkit-media-controls-time-remaining-display {
+  display: none;
+}
+
+video::-webkit-media-controls-mute-button {
+  display: none;
+}
+
+video::-webkit-media-controls-toggle-closed-captions-button {
+  display: none;
+}
+
+video::-webkit-media-controls-volume-slider {
+  display: none;
+}
+
+video::-webkit-media-controls-enclosure {
+  display: none;
+}
+
+.control {
+  position: absolute;
+  top: 0;
+  display: none;
+}
+
+.control .progress_bar {
+  width: 100%;
+  height: 5px;
+  background: rgba(204, 204, 204, 0.5);
+  position: absolute;
+  bottom: 30px;
+  border-radius: 2px;
+}
+
+.control .progress_bar > div {
+  width: 0;
+  height: 5px;
+  background: #1890ff;
+}
+
+.control .progress_bar .logo {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: -40px;
+  left: 0;
+  transform: scale(1.5) translateX(-13px);
+}
+
+.control .toolbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+}
+
+.control .toolbar .left {
+  display: flex;
+  align-items: center;
+}
+
+.control .toolbar .left svg {
+  width: 32px;
+  height: 22px;
+}
+
+.control .toolbar .right {
+  display: flex;
+}
+
+.control .toolbar .right .tag {
+  position: relative;
+  width: 36px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  fill: #fff;
+  z-index: 2;
+}
+
+.control .toolbar .right .tag .tag_content {
+  display: none;
+  position: absolute;
+  bottom: 30px;
+  background: #000;
+  padding: 10px;
+}
+
+.control .toolbar .right .resolution .tag_content {
+  right: -16px;
+}
+
+.control .toolbar .right .tag:hover .tag_content {
+  display: block;
+}
+
+.control:hover {
+  display: block !important;
+}
+
+.videoBox {
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+.videoBox:hover .control {
+  display: block;
+}
